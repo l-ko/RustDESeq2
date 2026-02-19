@@ -1,0 +1,19 @@
+[package]
+name = 'rust_deseq2_ext'
+publish = false
+version = '0.1.0'
+edition = '2021'
+rust-version = '1.65'
+
+[lib]
+crate-type = [ 'staticlib' ]
+name = 'RustDESeq2'
+
+[dependencies]
+extendr-api = '0.8.1'
+ndarray = '0.16'
+rust_deseq2_core = { package = 'rust_deseq2', version = "0.1.0" }
+
+[profile.release]
+lto = true
+codegen-units = 1
