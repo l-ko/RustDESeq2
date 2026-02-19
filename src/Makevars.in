@@ -1,7 +1,7 @@
 TARGET_DIR = ./rust/target
 LIBDIR = $(TARGET_DIR)/@LIBDIR@
-STATLIB = $(LIBDIR)/librust_deseq2.a
-PKG_LIBS = -L$(LIBDIR) -lrust_deseq2
+STATLIB = $(LIBDIR)/libRustDESeq2.a
+PKG_LIBS = -L$(LIBDIR) -lRustDESeq2
 
 all: $(SHLIB) rust_clean
 

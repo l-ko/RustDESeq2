@@ -27,6 +27,7 @@ fn other_err<T: std::fmt::Display>(e: T) -> extendr_api::Error {
 }
 
 #[extendr]
+/// @export
 fn deseq_dataset_from_matrix(
     count_data: Vec<f64>,
     nrows: usize,
@@ -52,6 +53,7 @@ fn deseq_dataset_from_matrix(
 }
 
 #[extendr]
+/// @export
 fn deseq(mut dds: ExternalPtr<DdsWithDesignInfo>) -> extendr_api::Result<ExternalPtr<DdsWithDesignInfo>> {
     let design_info = run_deseq(&mut dds.dds).map_err(other_err)?;
     dds.design_info = Some(design_info);
@@ -59,6 +61,7 @@ fn deseq(mut dds: ExternalPtr<DdsWithDesignInfo>) -> extendr_api::Result<Externa
 }
 
 #[extendr]
+/// @export
 fn results(
     dds: ExternalPtr<DdsWithDesignInfo>,
     numerator: String,
@@ -84,6 +87,7 @@ fn results(
 }
 
 #[extendr]
+/// @export
 fn counts(dds: ExternalPtr<DdsWithDesignInfo>, normalized: bool) -> RMatrix<f64> {
     if normalized {
         if let Some(nc) = dds.dds.normalized_counts() {
@@ -97,7 +101,7 @@ fn counts(dds: ExternalPtr<DdsWithDesignInfo>, normalized: bool) -> RMatrix<f64>
 }
 
 extendr_module! {
-    mod rust_deseq2;
+    mod RustDESeq2;
     fn deseq_dataset_from_matrix;
     fn deseq;
     fn results;
