@@ -48,11 +48,15 @@ norm_counts <- RustDESeq2::counts(dds, normalized = TRUE)
 
 Currently supports interfaces:
 
-- `deseq_dataset_from_matrix`
-- `deseq`
-- `results`
-- `counts`
-- `vst` - Variance stabilizing transformation
+- `deseq_dataset_from_matrix` - Create DESeqDataSet from count matrix
+- `deseq` - Run DESeq2 differential expression analysis
+- `results` - Extract differential expression results
+- `counts` - Get raw or normalized counts
+- `dispersion_estimates` - Get final dispersion estimates for each gene
+- `dispersion_function` - Get dispersion function coefficients (asymptotic dispersion, extra Poisson)
+- `base_mean` - Get mean of normalized counts for each gene
+- `size_factors` - Get size factors for each sample
+- `vst` - Variance stabilizing transformation using proper DESeq2 algorithm
 - `assay` - Extract transformed data from vst objects
 
 to be used in classic R DEseq2 style (eg. you want to switch your R DEseq2 implementation to Rust for performance reasons).
