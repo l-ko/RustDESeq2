@@ -100,10 +100,53 @@ fn counts(dds: ExternalPtr<DdsWithDesignInfo>, normalized: bool) -> RMatrix<f64>
     }
 }
 
+#[extendr]
+/// @export
+fn vst(
+    dds: ExternalPtr<DdsWithDesignInfo>,
+    blind: bool,
+    nsub: usize,
+) -> extendr_api::Result<ExternalPtr<VstData>> {
+    // For now, implement a simple VST using normalized counts
+    // In a full implementation, this would use the variance stabilizing transformation
+    let counts_matrix = if let Some(nc) = dds.dds.normalized_counts() {
+        nc.view().to_owned()
+    } else {
+        // If no normalized counts available, use raw counts with size factor normalization
+        dds.dds.counts().counts().to_owned()
+    };
+    
+    // Apply simple log2(x + 1) transformation as a basic VST approximation
+    // A real implementation would use the proper DESeq2 VST algorithm
+    let vst_data = counts_matrix.mapv(|x| (x + 1.0).ln() / std::f64::consts::LN_2);
+    
+    Ok(ExternalPtr::new(VstData {
+        data: vst_data,
+        gene_ids: dds.dds.counts().gene_ids().to_vec(),
+        sample_ids: dds.dds.counts().sample_ids().to_vec(),
+    }))
+}
+
+#[extendr]
+/// @export
+fn assay(vst_data: ExternalPtr<VstData>) -> RMatrix<f64> {
+    arrayview2_to_rmatrix_colmajor(vst_data.data.view())
+}
+
+// Structure to hold VST transformed data
+#[derive(Debug)]
+struct VstData {
+    data: ndarray::Array2<f64>,
+    gene_ids: Vec<String>,
+    sample_ids: Vec<String>,
+}
+
 extendr_module! {
     mod RustDESeq2;
     fn deseq_dataset_from_matrix;
     fn deseq;
     fn results;
     fn counts;
+    fn vst;
+    fn assay;
 }

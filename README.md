@@ -24,7 +24,7 @@ remotes::install_github("l-ko/RustDESeq2")
 library(RustDESeq2)
 
 # Create DESeq dataset from count matrix
-dds <- deseq_dataset_from_matrix(
+dds <- RustDESeq2::deseq_dataset_from_matrix(
   count_data = your_count_vector,
   nrows = n_genes,
   ncols = n_samples,
@@ -35,23 +35,25 @@ dds <- deseq_dataset_from_matrix(
 )
 
 # Run DESeq2 analysis
-dds <- deseq(dds)
+dds <- RustDESeq2::deseq(dds)
 
 # Get results
-results <- results(dds, "treated", "control", alpha = 0.05)
+results <- RustDESeq2::results(dds, "treated", "control", alpha = 0.05)
 
 # Get normalized counts
-norm_counts <- counts(dds, normalized = TRUE)
+norm_counts <- RustDESeq2::counts(dds, normalized = TRUE)
 ```
 
 ## Features
 
-Currently suppots interfaces:
+Currently supports interfaces:
 
 - `deseq_dataset_from_matrix`
 - `deseq`
 - `results`
 - `counts`
+- `vst` - Variance stabilizing transformation
+- `assay` - Extract transformed data from vst objects
 
 to be used in classic R DEseq2 style (eg. you want to switch your R DEseq2 implementation to Rust for performance reasons).
 

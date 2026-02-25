@@ -22,5 +22,11 @@ results <- function(dds, numerator, denominator, alpha) .Call(wrap__results, dds
 #' @export
 counts <- function(dds, normalized) .Call(wrap__counts, dds, normalized)
 
+#' @export
+vst <- function(dds, blind, nsub) .Call(wrap__vst, dds, blind, nsub)
+
+#' @export
+assay <- function(vst_data) .Call(wrap__assay, vst_data)
+
 
 # nolint end
