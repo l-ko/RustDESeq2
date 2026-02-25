@@ -107,23 +107,16 @@ fn vst(
     blind: bool,
     nsub: usize,
 ) -> extendr_api::Result<ExternalPtr<VstData>> {
-    // For now, implement a simple VST using normalized counts
-    // In a full implementation, this would use the variance stabilizing transformation
-    let counts_matrix = if let Some(nc) = dds.dds.normalized_counts() {
-        nc.view().to_owned()
-    } else {
-        // If no normalized counts available, use raw counts with size factor normalization
-        dds.dds.counts().counts().to_owned()
-    };
+    use rust_deseq2_core::transform::{vst, VstMethod};
     
-    // Apply simple log2(x + 1) transformation as a basic VST approximation
-    // A real implementation would use the proper DESeq2 VST algorithm
-    let vst_data = counts_matrix.mapv(|x| (x + 1.0).ln() / std::f64::consts::LN_2);
+    // Use proper VST from underlying crate
+    let vst_result = vst(&dds.dds, VstMethod::Parametric, blind)
+        .map_err(|e| extendr_api::Error::Other(e.to_string()))?;
     
     Ok(ExternalPtr::new(VstData {
-        data: vst_data,
-        gene_ids: dds.dds.counts().gene_ids().to_vec(),
-        sample_ids: dds.dds.counts().sample_ids().to_vec(),
+        data: vst_result.data,
+        gene_ids: vst_result.gene_ids,
+        sample_ids: vst_result.sample_ids,
     }))
 }
 
@@ -141,6 +134,47 @@ struct VstData {
     sample_ids: Vec<String>,
 }
 
+#[extendr]
+/// @export
+fn dispersion_estimates(dds: ExternalPtr<DdsWithDesignInfo>) -> Robj {
+    let dispersions = dds.dds.dispersions().unwrap();
+    // Convert to R vector
+    let disp_vec: Vec<f64> = dispersions.to_vec();
+    extendr_api::Robj::from(disp_vec)
+}
+
+#[extendr]
+/// @export
+fn dispersion_function(dds: ExternalPtr<DdsWithDesignInfo>) -> List {
+    let (asympt_disp, extra_pois) = dds.dds.dispersion_function().unwrap();
+    // Return as list to match standard DESeq2 interface
+    list!(
+        asympt_disp = asympt_disp,
+        extra_pois = extra_pois
+    )
+}
+
+#[extendr]
+/// @export
+fn size_factors(dds: ExternalPtr<DdsWithDesignInfo>) -> RMatrix<f64> {
+    let sf = dds.dds.size_factors().unwrap();
+    // Convert 1D array to 2D matrix
+    let sf_matrix = sf.view().into_shape((sf.len(), 1)).unwrap();
+    arrayview2_to_rmatrix_colmajor(sf_matrix)
+}
+
+#[extendr]
+/// @export
+fn base_mean(dds: ExternalPtr<DdsWithDesignInfo>) -> Robj {
+    // Calculate base mean from normalized counts
+    let nc = dds.dds.normalized_counts().unwrap();
+    // Calculate mean on Axis(1) to get mean of each gene (row)
+    let base_means = nc.view().map_axis(ndarray::Axis(1), |view| view.mean().unwrap_or(0.0));
+    // Convert to R vector
+    let base_vec: Vec<f64> = base_means.to_vec();
+    extendr_api::Robj::from(base_vec)
+}
+
 extendr_module! {
     mod RustDESeq2;
     fn deseq_dataset_from_matrix;
@@ -149,4 +183,8 @@ extendr_module! {
     fn counts;
     fn vst;
     fn assay;
+    fn dispersion_estimates;
+    fn dispersion_function;
+    fn size_factors;
+    fn base_mean;
 }

@@ -28,5 +28,17 @@ vst <- function(dds, blind, nsub) .Call(wrap__vst, dds, blind, nsub)
 #' @export
 assay <- function(vst_data) .Call(wrap__assay, vst_data)
 
+#' @export
+dispersion_estimates <- function(dds) .Call(wrap__dispersion_estimates, dds)
+
+#' @export
+dispersion_function <- function(dds) .Call(wrap__dispersion_function, dds)
+
+#' @export
+size_factors <- function(dds) .Call(wrap__size_factors, dds)
+
+#' @export
+base_mean <- function(dds) .Call(wrap__base_mean, dds)
+
 
 # nolint end
