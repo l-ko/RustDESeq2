@@ -48,25 +48,21 @@ vst_data <- RustDESeq2::assay(vst_obj)
 
 ## Features
 
-Currently supports interfaces:
+Currently supports functions:
 
-### Core Functions
 - `deseq_dataset_from_matrix` - Create DESeqDataSet from count matrix
 - `deseq` - Run DESeq2 differential expression analysis
 - `results` - Extract differential expression results with contrast specification
 
-### Data Access Functions
 - `counts` - Get raw or normalized counts from DESeqDataSet
 - `assay` - Extract data from DESeqDataSet or VST objects (supports "counts", "normalized", etc.)
 - `vst_transform` - Variance stabilizing transformation using proper DESeq2 algorithm
 
-### Statistical Information Functions
 - `dispersion_estimates` - Get final dispersion estimates for each gene
 - `dispersion_function` - Get dispersion function coefficients (asymptotic dispersion, extra Poisson)
 - `base_mean` - Get mean of normalized counts for each gene
 - `size_factors` - Get size factors for each sample
 
-### Design and Model Information
 - `design_matrix` - Get the design matrix used in the analysis
 - `coefficients` - Get model coefficients (log2 fold changes)
 - `coefficient_se` - Get standard errors for model coefficients
