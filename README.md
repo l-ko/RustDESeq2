@@ -58,8 +58,8 @@ Currently supports functions:
 - `assay` - Extract data from DESeqDataSet or VST objects (supports "counts", "normalized", etc.)
 - `vst_transform` - Variance stabilizing transformation using proper DESeq2 algorithm
 
-- `dispersion_estimates` - Get final dispersion estimates for each gene
-- `dispersion_function` - Get dispersion function coefficients (asymptotic dispersion, extra Poisson)
+- `dispersions` - Get dispersion estimates for each gene
+- `dispersion_function` - Get dispersion function coefficients
 - `base_mean` - Get mean of normalized counts for each gene
 - `size_factors` - Get size factors for each sample
 
