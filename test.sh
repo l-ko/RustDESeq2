@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Test script for RustDESeq2 interfaces
-# This script runs the R test script to verify all functions
+# This script tests all functions with presence, type, and functionality checks
 
-echo "=== Running RustDESeq2 Test ==="
+echo "=== RustDESeq2 Test Script ==="
 echo "Directory: $(pwd)"
 echo ""
 
@@ -14,7 +14,8 @@ echo "Changed to package directory: $(pwd)"
 echo ""
 
 # Run the R test script
-Rscript tests/test_interfaces.R
+echo "Running R test script..."
+Rscript tests/test.R
 
 echo ""
-echo "=== Test Finished ==="
+echo "=== Test Complete ==="

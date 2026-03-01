@@ -25,9 +25,7 @@ library(RustDESeq2)
 
 # Create DESeq dataset from count matrix
 dds <- RustDESeq2::deseq_dataset_from_matrix(
-  count_data = your_count_vector,
-  nrows = n_genes,
-  ncols = n_samples,
+  count_data = your_count_matrix,
   gene_ids = gene_names,
   sample_ids = sample_names,
   condition = sample_conditions,
@@ -42,30 +40,42 @@ results <- RustDESeq2::results(dds, "treated", "control", alpha = 0.05)
 
 # Get normalized counts
 norm_counts <- RustDESeq2::counts(dds, normalized = TRUE)
+
+# Get VST transformed data
+vst_obj <- RustDESeq2::vst_transform(dds, blind = FALSE)
+vst_data <- RustDESeq2::assay(vst_obj)
 ```
 
 ## Features
 
 Currently supports interfaces:
 
+### Core Functions
 - `deseq_dataset_from_matrix` - Create DESeqDataSet from count matrix
 - `deseq` - Run DESeq2 differential expression analysis
-- `results` - Extract differential expression results
-- `counts` - Get raw or normalized counts
+- `results` - Extract differential expression results with contrast specification
+
+### Data Access Functions
+- `counts` - Get raw or normalized counts from DESeqDataSet
+- `assay` - Extract data from DESeqDataSet or VST objects (supports "counts", "normalized", etc.)
+- `vst_transform` - Variance stabilizing transformation using proper DESeq2 algorithm
+
+### Statistical Information Functions
 - `dispersion_estimates` - Get final dispersion estimates for each gene
 - `dispersion_function` - Get dispersion function coefficients (asymptotic dispersion, extra Poisson)
 - `base_mean` - Get mean of normalized counts for each gene
 - `size_factors` - Get size factors for each sample
-- `vst` - Variance stabilizing transformation using proper DESeq2 algorithm
-- `assay` - Extract transformed data from vst objects
 
-to be used in classic R DEseq2 style (eg. you want to switch your R DEseq2 implementation to Rust for performance reasons).
+### Design and Model Information
+- `design_matrix` - Get the design matrix used in the analysis
+- `coefficients` - Get model coefficients (log2 fold changes)
+- `coefficient_se` - Get standard errors for model coefficients
 
 ## System Requirements
 
 - R (>= 4.2)
-- Rust (>= 1.65.0) - automatically installed if needed
-- Cargo (Rust package manager) - automatically installed if needed
+- Rust (>= 1.65.0)
+- Cargo (Rust package manager)
 
 ## License
 

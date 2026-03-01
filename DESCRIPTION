@@ -1,6 +1,6 @@
 Package: RustDESeq2
 Title: RustDESeq2: Wrapper around rust_deseq2 crate.
-Version: 0.0.0.9000
+Version: 1.0.0
 Authors@R: 
     person("Leonid", "Kovalenko", , "lenkovlen@gmail.com", role = c("aut", "cre"))
 Description: The package propagates the rust_deseq2 crate interface to R in a convenient way.

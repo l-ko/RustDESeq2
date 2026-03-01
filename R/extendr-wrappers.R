@@ -11,7 +11,7 @@
 NULL
 
 #' @export
-deseq_dataset_from_matrix <- function(count_data, nrows, ncols, gene_ids, sample_ids, condition, design_variable) .Call(wrap__deseq_dataset_from_matrix, count_data, nrows, ncols, gene_ids, sample_ids, condition, design_variable)
+deseq_dataset_from_matrix <- function(count_data, gene_ids, sample_ids, condition, design_variable) .Call(wrap__deseq_dataset_from_matrix, count_data, gene_ids, sample_ids, condition, design_variable)
 
 #' @export
 deseq <- function(dds) .Call(wrap__deseq, dds)
@@ -23,13 +23,13 @@ results <- function(dds, numerator, denominator, alpha) .Call(wrap__results, dds
 counts <- function(dds, normalized) .Call(wrap__counts, dds, normalized)
 
 #' @export
-vst <- function(dds, blind, nsub) .Call(wrap__vst, dds, blind, nsub)
+vst_transform <- function(dds, blind) .Call(wrap__vst_transform, dds, blind)
 
 #' @export
-assay <- function(vst_data) .Call(wrap__assay, vst_data)
+assay <- function(obj, assay_name) .Call(wrap__assay, obj, assay_name)
 
 #' @export
-dispersion_estimates <- function(dds) .Call(wrap__dispersion_estimates, dds)
+dispersions <- function(dds) .Call(wrap__dispersions, dds)
 
 #' @export
 dispersion_function <- function(dds) .Call(wrap__dispersion_function, dds)
@@ -39,6 +39,15 @@ size_factors <- function(dds) .Call(wrap__size_factors, dds)
 
 #' @export
 base_mean <- function(dds) .Call(wrap__base_mean, dds)
+
+#' @export
+design_matrix <- function(dds) .Call(wrap__design_matrix, dds)
+
+#' @export
+coefficients <- function(dds) .Call(wrap__coefficients, dds)
+
+#' @export
+coefficient_se <- function(dds) .Call(wrap__coefficient_se, dds)
 
 
 # nolint end
