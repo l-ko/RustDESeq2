@@ -2,7 +2,7 @@
 
 This package is a wrapper around the rust_deseq2 crate. I recommend to check out the description of the crate author @necoli1822's repository for more information: https://github.com/necoli1822/rust_deseq2.
 
-The benefits of using rust_deseq2 instead of using R implememntation of DESeq2 are enormous. Interface has minor differences to classic R DESeq2 but implements the same model based on the same study. I decided to create a quick wrapper to be loaded as an R module.
+The benefits of using rust_deseq2 compared to R implementation are enormous. Interface has minor differences to classic R DESeq2 but implements the same model based on the same study. I decided to create a wrapper to be loaded as an R module.
 
 ## Installation
 
